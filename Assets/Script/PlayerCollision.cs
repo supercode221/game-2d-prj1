@@ -4,10 +4,12 @@ using UnityEngine;
 public class PlayerCollision : MonoBehaviour
 {
     private GameManager gameManager;
+    private AudioManager audioManager;
 
     private void Awake()
     {
         gameManager = FindAnyObjectByType<GameManager>();
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -15,6 +17,7 @@ public class PlayerCollision : MonoBehaviour
         if (other.CompareTag("Coin"))
         {
             Destroy(other.gameObject);
+            audioManager.PlayCoin();
             gameManager.AddScore(1);
         }
 
@@ -26,6 +29,12 @@ public class PlayerCollision : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             gameManager.GameOver();
+        }
+        
+        if (other.CompareTag("Key"))
+        {
+            Destroy(other.gameObject);
+            gameManager.GameWin();
         }
     }
 }
